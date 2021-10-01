@@ -1,16 +1,19 @@
 var todoContainer = $("#todoContainer");
 var myClock = $("#currentDay");
 var todos = [];
+//Get or save empty array of todos to get started
 if(localStorage.getItem("todos") == null){
     storeTodos();
   }
   else{
     getTodos();
   }
+//Start everything for the page
 displayTodos();
 setTime();
 setColors();
 
+//Sets colors according to time of day
 function setColors(){
     var date = new Date();
     var hour = date.getHours();
@@ -27,6 +30,7 @@ function setColors(){
     }
 }
 
+//Sets date at top
 function setTime() {
     myClock.text(moment().format("LL"));
     timerInterval = setInterval(function() {
@@ -34,6 +38,7 @@ function setTime() {
     }, 1000);
 }
 
+//Goes through array and prints the right task at the right hour
 function displayTodos(){
     for(var i = 0; i < todoContainer.children().length; i++){
         var temp = todos.filter(obj => {      
@@ -46,6 +51,7 @@ function displayTodos(){
     }
 }
 
+//Retrieves todos
 function getTodos(){
     var temptodos = JSON.parse(localStorage.getItem("todos"));
   
@@ -54,12 +60,13 @@ function getTodos(){
     }
 }
 
+// Stores todos
 function storeTodos(){
     localStorage.clear();
     localStorage.setItem("todos", JSON.stringify(todos));
-    console.log(JSON.parse(localStorage.getItem("todos")));
 }
 
+// When button is pressed, take time and task and save them into array and store them into local storage
 function saveTodo(time, task){
     var found = false;
     var newItem = {time: time, task: task};
@@ -76,11 +83,12 @@ function saveTodo(time, task){
     storeTodos();
 }
 
+// Upon clicking a button, save task
 todoContainer.on("click", ".saveBtn", function(){
     var time = $(this).parent().attr('id');
     var task = $(this).siblings()[1].textContent;
-    if(task != ""){
-        saveTodo(time, task);
-    }
+    
+    saveTodo(time, task);
+    
 })
 
